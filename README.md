@@ -3,8 +3,9 @@ Repositório para envio do jogo de Programação II no curso do Jogos Digitais 2
 
 MILLENIUM ASTEROIDS
 
-Movimentação:
+Jogabilidade:
 
-Setas Esquerda e Direita
+Setas Direcionais para movimentação e Barra de espaço para atirar!
 
-Tiro Barra de Espaço
+Boa Diversão!
+Avalie com Carinho!
