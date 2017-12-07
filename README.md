@@ -7,6 +7,10 @@ Jogabilidade:
 
 Setas Direcionais para movimentação e Barra de espaço para atirar!
 
+Para sair do jogo amiguinho(a), pressione a tecla <ESC> do seu teclado!
+
 Boa Diversão!
 
 Avalie com Carinho!
+
+Eh nooooooooiz!

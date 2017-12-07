@@ -133,7 +133,7 @@ pygame.mixer.init()
 pygame.init()
 
 font = pygame.font.SysFont(None, 60, bold=False, italic=False)
-screen = pygame.display.set_mode((1200, 800), pygame.FULLSCREEN, 32)
+screen = pygame.display.set_mode((1200, 800), 0, 32)
 
 tiros = []
 meteoritos = []
