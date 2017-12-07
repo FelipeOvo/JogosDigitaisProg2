@@ -128,10 +128,12 @@ class Meteoro():
         self.Rect = pygame.Rect(self.posX, self.posY, self.size*tamw, self.size*tamh)
 
 
+pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.init()
 pygame.init()
 
 font = pygame.font.SysFont(None, 60, bold=False, italic=False)
-screen = pygame.display.set_mode((1200, 800), 0, 32)
+screen = pygame.display.set_mode((1200, 800), pygame.FULLSCREEN, 32)
 
 tiros = []
 meteoritos = []
@@ -140,7 +142,12 @@ millenium = Nave()
 tiro = None
 meteorito = None
 clock = pygame.time.Clock()
+pygame.mixer.music.load("musica1.ogg")
+tiro_sound = pygame.mixer.Sound("musica2.wav")
+explosao_sound = pygame.mixer.Sound("explosion.wav")
+batida_sound = pygame.mixer.Sound("batida.wav")
 
+pygame.mixer.music.play(-1)
 while True:
     clock.tick(30)
 
@@ -151,6 +158,9 @@ while True:
         moveNave = pygame.key.get_pressed()
         if moveNave[pygame.K_SPACE]:
             tiros.append(Tiro(millenium.posX, millenium.posY))
+            tiro_sound.play(0)
+        elif moveNave[pygame.K_ESCAPE]:
+            exit()
 
     met = random.randint(0, 1000)
     if met > 980:
@@ -172,6 +182,7 @@ while True:
         if meteorito.Rect.colliderect(millenium.Rect):
             meteoritos.remove(meteorito)
             millenium.vida -= 1
+            batida_sound.play(0)
             if millenium.vida == 0:
                 exit()
 
@@ -183,6 +194,7 @@ while True:
                 if meteorito.vida == 0:
                     meteoritos.remove(meteorito)
                     millenium.pontos += 1
+                    explosao_sound.play(0)
 
     screen.blit(millenium.img, (millenium.posX, millenium.posY))
 

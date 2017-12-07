@@ -8,4 +8,5 @@ Jogabilidade:
 Setas Direcionais para movimentação e Barra de espaço para atirar!
 
 Boa Diversão!
+
 Avalie com Carinho!
