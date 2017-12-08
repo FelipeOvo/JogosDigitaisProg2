@@ -1,6 +1,7 @@
 # MILLENIUM ASTEROIDS
 
-Abre o arquivo ```nave.py``` 
+Abre o arquivo ```nave.py```
+
 **Jogabilidade:**
 
 ```Setas Direcionais``` para movimentação e ```Barra de espaço``` para atirar!
