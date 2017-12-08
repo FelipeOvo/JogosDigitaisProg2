@@ -12,7 +12,7 @@ class Nave():
         self.posX = 580
         self.posY = 700
         self.Rect = pygame.Rect(self.posX, self.posY, 100, 96)
-        self.vida = 20
+        self.vida = 10
         self.pontos = 0
 
     def moveNave(self):
@@ -134,7 +134,8 @@ pygame.init()
 
 font = pygame.font.SysFont(None, 60, bold=False, italic=False)
 screen = pygame.display.set_mode((1200, 800), 0, 32)
-
+titulo = pygame.image.load("./titulo.png")
+gameover = pygame.image.load("./gameover.png")
 tiros = []
 meteoritos = []
 fundo = pygame.image.load("./fundo1.jpg")
@@ -184,6 +185,9 @@ while True:
             millenium.vida -= 1
             batida_sound.play(0)
             if millenium.vida == 0:
+                screen.blit(gameover, (0, 0))
+                pygame.display.update()
+                pygame.time.wait(1500)
                 exit()
 
     for meteorito in meteoritos:
@@ -202,5 +206,5 @@ while True:
     vidas = font.render("Vidas: " + str(millenium.vida), True, (255, 255, 255))
     screen.blit(vidas, (60, 20))
     screen.blit(pontos, (900, 20))
-
+    screen.blit(titulo, (440, 20))
     pygame.display.flip()
