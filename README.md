@@ -1,8 +1,6 @@
 # MILLENIUM ASTEROIDS
 
-Descompacte o arquivo ```MilleniunAsteroids.zip```
-
-Abra a pasta ```MilleniunAsteroids``` e execute o arquivo ```nave.py```
+Execute o arquivo ```nave.py```
 
 **Jogabilidade:**
 
