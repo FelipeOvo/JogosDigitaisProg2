@@ -3,7 +3,7 @@ import pygame
 import random
 
 
-class Nave():
+class Nave():  # Definição da Nave
     def __init__(self):
 
         self.img = pygame.image.load("./millenium.png")
@@ -15,7 +15,7 @@ class Nave():
         self.vida = 10
         self.pontos = 0
 
-    def moveNave(self):
+    def moveNave(self):  # Movimentação da Nave
             moveNave = pygame.key.get_pressed()
             if moveNave[pygame.K_LEFT]:
 
@@ -88,7 +88,7 @@ class Nave():
             self.Rect = pygame.Rect(self.posX, self.posY, 100, 96)
 
 
-class Tiro():
+class Tiro():  # Definição do Tiro
     def __init__(self, posX, posY):
 
         self.img = pygame.image.load("./shoot.png")
@@ -96,12 +96,12 @@ class Tiro():
         self.posY = posY
         self.Rect = pygame.Rect(self.posX, self.posY, 30, 15)
 
-    def refreshPos(self):
+    def refreshPos(self):  # posição do Tiro na tela e Rect de colisão
         self.posY -= 20
         self.Rect = pygame.Rect(self.posX, self.posY, 30, 15)
 
 
-class Meteoro():
+class Meteoro():  # Definição do Meteoro
     def __init__(self, posX, screen):
 
         self.img = pygame.image.load("./meteoro.png")
@@ -115,11 +115,11 @@ class Meteoro():
         self.screen = screen
         self.velo = random.randint(2, 8)
 
-    def refreshPos(self):
+    def refreshPos(self):  # Movimentação e Rotação do Meteoro
         self.posY += self.velo
         self.angulo += self.rotate
 
-    def Carimbo(self):
+    def Carimbo(self):  # Printando a rotação, movimentação e o tamanho do meteoro na tela e Rect de colisão
         tamw = self.img.get_rect().width
         tamh = self.img.get_rect().height
         img = pygame.transform.scale(self.img, (self.size*tamw, self.size*tamh))
@@ -128,103 +128,117 @@ class Meteoro():
         self.Rect = pygame.Rect(self.posX, self.posY, self.size*tamw, self.size*tamh)
 
 
-pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.pre_init(44100, -16, 2, 2048)  # Mixer do som
 pygame.mixer.init()
 pygame.init()
 
-font = pygame.font.SysFont(None, 60, bold=False, italic=False)
-screen = pygame.display.set_mode((1200, 800), 0, 32)
-titulo = pygame.image.load("./titulo.png")
-gameover = pygame.image.load("./gameover.png")
-pygame.mixer.music.load("musica1.ogg")
-tiro_sound = pygame.mixer.Sound("musica2.wav")
-explosao_sound = pygame.mixer.Sound("explosion.wav")
-batida_sound = pygame.mixer.Sound("batida.wav")
+font = pygame.font.SysFont(None, 60, bold=False, italic=False)  # Fonte de texto
+screen = pygame.display.set_mode((1200, 800), 0, 32)  # Tamanho da tela
+titulo = pygame.image.load("./titulo.png")  # Imagem do titulo do jogo
+gameover = pygame.image.load("./gameover.png")  # Imagem da tela do GameOver
+menuimg = pygame.image.load("./menu.png")  # Imagem da tele do Menu
+pygame.mixer.music.load("musica1.ogg")  # Música do jogo
+tiro_sound = pygame.mixer.Sound("musica2.wav")  # Som do tiro
+explosao_sound = pygame.mixer.Sound("explosion.wav")  # Som da explosão
+batida_sound = pygame.mixer.Sound("batida.wav")  # Som do choque entre a Nave e o Asteriode
 clock = pygame.time.Clock()
-fundo = pygame.image.load("./fundo1.jpg")
-pygame.mixer.music.play(-1)
+fundo = pygame.image.load("./fundo1.jpg")  # Imagem de fundo do Jogo
+pygame.mixer.music.play(-1)  # Mixer do Play da Música
 finish = False
 
-while finish == False:
+while finish is False:  # Loop das listas e chamada da Nave
 
     tiros = []
     meteoritos = []
     millenium = Nave()
     tiro = None
     meteorito = None
-    rodando = True
+    rodando = False
+    menu = True
 
-    while rodando:
-        clock.tick(30)
+    while menu:  # Menu
 
-        screen.blit(fundo, (0, 0))
+        screen.blit(menuimg, (0, 0))
+        pygame.display.update()
         for event in pygame.event.get():
             if (event.type == pygame.QUIT):
                 exit()
             moveNave = pygame.key.get_pressed()
             if moveNave[pygame.K_SPACE]:
-                tiros.append(Tiro(millenium.posX, millenium.posY))
-                tiro_sound.play(0)
-            elif moveNave[pygame.K_ESCAPE]:
-                exit()
+                menu = False
+                rodando = True
 
-        met = random.randint(0, 1000)
-        if met > 980:
-            meteoritos.append(Meteoro(random.randint(1, 1120), screen))
+    while rodando:  # Jogo executando
+            clock.tick(30)
 
-        millenium.moveNave()
-
-        for tiro in tiros:
-            tiro.refreshPos()
-            screen.blit(tiro.img, (tiro.posX, tiro.posY))
-            if tiro.posY < -40:
-                tiros.remove(tiro)
-
-        for meteorito in meteoritos:
-            meteorito.refreshPos()
-            meteorito.Carimbo()
-            if meteorito.posY > 800:
-                meteoritos.remove(meteorito)
-            if meteorito.Rect.colliderect(millenium.Rect):
-                meteoritos.remove(meteorito)
-                millenium.vida -= 1
-                batida_sound.play(0)
-                if millenium.vida == 0:
-                    finish = True
-
-        for meteorito in meteoritos:
-            for tiro in tiros:
-                if meteorito.Rect.colliderect(tiro.Rect):
-                    tiros.remove(tiro)
-                    meteorito.vida -= 1
-                    if meteorito.vida == 0:
-                        meteoritos.remove(meteorito)
-                        millenium.pontos += 1
-                        explosao_sound.play(0)
-
-        while finish:
-            screen.blit(gameover, (0, 0))
-            pygame.display.update()
-            for event in pygame.event.get():
+            screen.blit(fundo, (0, 0))
+            for event in pygame.event.get():  # ESC para sair do jogo
                 if (event.type == pygame.QUIT):
-                        exit()
-                moveNave = pygame.key.get_pressed()
-                if moveNave[pygame.K_ESCAPE]:
                     exit()
-                elif moveNave[pygame.K_SPACE]:
-                    millenium.vida = 10
-                    millenium.pontos = 0
-                    millenium.posX = 580
-                    millenium.posY = 700
-                    tiros = []
-                    meteoritos = []
-                    finish = False
+                moveNave = pygame.key.get_pressed()  # Atirando
+                if moveNave[pygame.K_SPACE]:
+                    tiros.append(Tiro(millenium.posX, millenium.posY))
+                    tiro_sound.play(0)
+                elif moveNave[pygame.K_ESCAPE]:
+                    exit()
 
-        screen.blit(millenium.img, (millenium.posX, millenium.posY))
+            met = random.randint(0, 1000)  # Algoritimo da queda dos asteriodes na tela
+            if met > 1000 - 20 - (millenium.pontos / 2):  # Difculdade conforme pontuação
+                meteoritos.append(Meteoro(random.randint(1, 1120), screen))
 
-        pontos = font.render("Pontos: " + str(millenium.pontos), True, (255, 255, 255))
-        vidas = font.render("Vidas: " + str(millenium.vida), True, (255, 255, 255))
-        screen.blit(vidas, (60, 20))
-        screen.blit(pontos, (900, 20))
-        screen.blit(titulo, (440, 20))
-        pygame.display.flip()
+            millenium.moveNave()  # Movimentação da Nava
+
+            for tiro in tiros:  # Movimentação do tiro na tela guardado em lista
+                tiro.refreshPos()
+                screen.blit(tiro.img, (tiro.posX, tiro.posY))
+                if tiro.posY < -40:  # Remoção do tiro após sair da tela do jogo
+                    tiros.remove(tiro)
+
+            for meteorito in meteoritos:  # Movimentação do asteroide guardado em lista
+                meteorito.refreshPos()
+                meteorito.Carimbo()
+                if meteorito.posY > 800:  # Remoçã do asterioide após sair da tela
+                    meteoritos.remove(meteorito)
+                if meteorito.Rect.colliderect(millenium.Rect):  # Colisão do asteroide com a nave
+                    meteoritos.remove(meteorito)
+                    millenium.vida -= 1
+                    batida_sound.play(0)
+                    if millenium.vida == 0:
+                        finish = True
+
+            for meteorito in meteoritos:  # Colisão do asteroide com o tiro e soma na pontuação
+                for tiro in tiros:
+                    if meteorito.Rect.colliderect(tiro.Rect):
+                        tiros.remove(tiro)
+                        meteorito.vida -= 1
+                        if meteorito.vida == 0:
+                            meteoritos.remove(meteorito)
+                            millenium.pontos += 1
+                            explosao_sound.play(0)
+
+            while finish:  # Tela do GameOver
+                screen.blit(gameover, (0, 0))
+                pygame.display.update()
+                for event in pygame.event.get():
+                    if (event.type == pygame.QUIT):
+                            exit()
+                    moveNave = pygame.key.get_pressed()
+                    if moveNave[pygame.K_ESCAPE]:
+                        exit()
+                    elif moveNave[pygame.K_SPACE]:
+                        millenium.vida = 10
+                        millenium.pontos = 0
+                        millenium.posX = 580
+                        millenium.posY = 700
+                        tiros = []
+                        meteoritos = []
+                        finish = False
+
+            screen.blit(millenium.img, (millenium.posX, millenium.posY))  # Print da Nave
+
+            pontos = font.render("Pontos: " + str(millenium.pontos), True, (255, 255, 255))  # Texto Pontuação
+            vidas = font.render("Vidas: " + str(millenium.vida), True, (255, 255, 255))  # Texto da Vida
+            screen.blit(vidas, (60, 20))  # Print da Vida
+            screen.blit(pontos, (900, 20))  # Print da Pontuação
+            screen.blit(titulo, (440, 20))  # Print do Título do jogo
+            pygame.display.flip()
