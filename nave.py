@@ -183,10 +183,10 @@ while finish is False:  # Loop das listas e chamada da Nave
                     exit()
 
             met = random.randint(0, 1000)  # Algoritimo da queda dos asteriodes na tela
-            if met > 1000 - 20 - (millenium.pontos / 2):  # Difculdade conforme pontuação
+            if met > 1000 - 20 - (millenium.pontos / 1.5):  # Difculdade conforme pontuação
                 meteoritos.append(Meteoro(random.randint(1, 1120), screen))
 
-            millenium.moveNave()  # Movimentação da Nava
+            millenium.moveNave()  # Movimentação da Nave
 
             for tiro in tiros:  # Movimentação do tiro na tela guardado em lista
                 tiro.refreshPos()
